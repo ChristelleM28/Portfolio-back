@@ -3,15 +3,15 @@ const { ProjectsControllers } = require("../controllers");
 
 
 //GET
-projectsRouter.get("/", ProjectsControllers.findMany);
+projectsRouter.get("/", ProjectsControllers.findAll);
 projectsRouter.get("/:id"), ProjectsControllers.findOneById);
 projectsRouter.get("/:name"), ProjectsControllers.findOneByName);
 
+//POST
+projectsRouter.post("/")
+
 //PUT
 projectsRouter.put("/")
-
-//POST
-
 
 //DELETE
 projectsRouter.delete("/:id"), ProjectsControllers.
