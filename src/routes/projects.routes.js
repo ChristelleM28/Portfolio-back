@@ -1,19 +1,19 @@
 const projectsRouter = require("express").Router();
-const { ProjectsControllers } = require("../controllers");
+const { projectsControllers } = require("../controllers");
 
 
 //GET
-projectsRouter.get("/", ProjectsControllers.findAll);
-projectsRouter.get("/:id"), ProjectsControllers.findOneById);
-projectsRouter.get("/:name"), ProjectsControllers.findOneByName);
+projectsRouter.get("/", projectsControllers.getAll);
+projectsRouter.get("/:id", projectsControllers.getOneById);
+projectsRouter.get("/:name", projectsControllers.getOneByName);
 
 //POST
-projectsRouter.post("/")
+projectsRouter.post("/", projectsControllers.createOne);
 
 //PUT
-projectsRouter.put("/")
+projectsRouter.put("/", projectsControllers.updateOne);
 
 //DELETE
-projectsRouter.delete("/:id"), ProjectsControllers.
+projectsRouter.delete("/:id", projectsControllers.deleteOne);
 
 module.exports = projectsRouter;
