@@ -12,14 +12,14 @@ const getAll = async (req, res) => {
 
 // recherche du projet par l'Id
 const getOneById = async (req, res) => {
-  //je récupère l'id qui est dans les paramètres
+  //je récupère l'id qui est dans les paramètres(.params)
   const { id } = req.params;
   try {
     const [results] = await Projects.findOneById(id);
     // je teste que mon tableau est rempli et récupère un résultat
     if (results.length === 0) {
       // si tableau = 0 càd vide, je renvois un message d'erreur
-      res.status(404).send("Project id ${id} not found");
+      res.status(404).send(`Project id ${id} not found`);
       // sinon
     } else {
       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
@@ -32,10 +32,21 @@ const getOneById = async (req, res) => {
 
 //recherche du prjet par le nom
 const getOneByName = async (req, res) => {
+  // je récupère le nom du projet via une requête (.query)
+  const { name } = req.query;
   try {
     const [results] = await Projects.findOneByName(name);
-    res.json(results);
-  } catch (err) {
+    // je teste que mon tableau est rempli et récupère un résultat
+// if (results.length ===0) {
+//         // si tableau = 0 càd vide, je renvois un message d'erreur
+//   res.status(404).send(`Project name ${name} not found`);
+//   //sinon 
+// } else {
+//       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
+//       res.json(results[0]);
+// }
+res.send(results);
+   } catch (err) {
     res.status(500).send(err.message);
   }
 };

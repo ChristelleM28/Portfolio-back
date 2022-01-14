@@ -13,7 +13,7 @@ class Projects {
   }
 
   static findOneByName(name) {
-    const sql = "SELECT * FROM projects WHERE name=?";
+    const sql = "SELECT * FROM projects WHERE project_name=?";
     return connection.promise().query(sql, [name]);
   }
 

@@ -5,7 +5,7 @@ const { projectsControllers } = require("../controllers");
 //GET
 projectsRouter.get("/", projectsControllers.getAll);
 projectsRouter.get("/:id", projectsControllers.getOneById);
-projectsRouter.get("/:name", projectsControllers.getOneByName);
+projectsRouter.get("/", projectsControllers.getOneByName);
 
 //POST
 projectsRouter.post("/", projectsControllers.createOne);
