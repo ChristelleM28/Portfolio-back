@@ -1,5 +1,8 @@
 const projectsControllers = require("./projects.controllers");
-// const usersController = require("./users.controllers");
+const imagesControllers = require("./images.controllers");
 
-module.exports = { projectsControllers };
+
+module.exports = { projectsControllers,
+  imagesControllers,
+};
 // usersControllers;

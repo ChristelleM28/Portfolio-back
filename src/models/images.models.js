@@ -1,14 +1,14 @@
 const { connection } = require("../../db-connection");
 
-class Projects {
+class Images {
   //pour le GET
   static findAll() {
-    const sql = "SELECT * FROM projects";
+    const sql = "SELECT * FROM images";
     return connection.promise().query(sql);
   }
 
   static findOneById(id) {
-  const sql = "SELECT * FROM projects WHERE id=?";
+  const sql = "SELECT * FROM images WHERE id=?";
   return connection.promise().query(sql, [id]);
   }
 
@@ -18,22 +18,22 @@ class Projects {
   // }
 
   //pour le post: création nouveau projet
-static createOne(project) {
-  const sql = "INSERT INTO projects SET ?";
-  return connection.promise().query(sql,[project]);
+static createOne(image) {
+  const sql = "INSERT INTO images SET ?";
+  return connection.promise().query(sql,[image]);
 }
 
 // pour le put: modification projet
-static updateOne(project,id) {
-  const sql ="UPDATE projects SET ? WHERE id=?";
-  return connection.promise().query(sql,[project, id]);
+static updateOne(image,id) {
+  const sql ="UPDATE images SET ? WHERE id=?";
+  return connection.promise().query(sql,[image, id]);
 }
 
 // pour le delete: suppression projet
 static deleteOneById(id) {
-  const sql = "DELETE FROM projects WHERE id=?";
+  const sql = "DELETE FROM images WHERE id=?";
   return connection.promise().query(sql,[id]);
 }
 }
 
-module.exports = Projects;
+module.exports = Images;
