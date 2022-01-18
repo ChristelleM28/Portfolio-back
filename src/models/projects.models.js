@@ -25,7 +25,7 @@ static createOne(project) {
 
 // pour le put: modification projet
 static updateOne(project,id) {
-  const sql ="ALTER TABLE projects WHERE id=?";
+  const sql ="UPDATE projects SET ? WHERE id=?";
   return connection.promise().query(sql,[project, id]);
 }
 

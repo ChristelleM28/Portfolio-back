@@ -12,10 +12,17 @@ const getAll = async (req, res) => {
 
 // recherche du projet par l'Id
 const getOneById = async (req, res) => {
-  //je récupère l'id qui est dans les paramètres(.params)
-  const { id } = req.params;
+  //je  créé une nouvelle variable pour récupérer l'id qui est dans les paramètres(.params) ligne 19
+  // const { id } = req.params;
+  console.log(req.id);
+  // je modifie la manière de récupérer l'id suite à l'ajout du controller de création : je vérifie que l'id existe
+  const id = req.params.id ? req.params.id : req.id;
+  //Le statut qui doit être renvoyé par le post est un 201 je créée une nouvelle variable et l'ajoute à ma réponse else ligne 30
+  const statusCode = req.method === "POST" ? 201 : 200;
+
   try {
     const [results] = await Projects.findOneById(id);
+    console.log(results);
     // je teste que mon tableau est rempli et récupère un résultat
     if (results.length === 0) {
       // si tableau = 0 càd vide, je renvois un message d'erreur
@@ -23,7 +30,7 @@ const getOneById = async (req, res) => {
       // sinon
     } else {
       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
-      res.json(results[0]);
+      res.status(statusCode).json(results[0]);
     }
   } catch (err) {
     res.status(500).send(err.message);
@@ -37,43 +44,40 @@ const getOneByName = async (req, res) => {
   try {
     const [results] = await Projects.findOneByName(name);
     // je teste que mon tableau est rempli et récupère un résultat
-// if (results.length ===0) {
-//         // si tableau = 0 càd vide, je renvois un message d'erreur
-//   res.status(404).send(`Project name ${name} not found`);
-//   //sinon 
-// } else {
-//       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
-//       res.json(results[0]);
-// }
-res.send(results);
-   } catch (err) {
+    // if (results.length ===0) {
+    //         // si tableau = 0 càd vide, je renvois un message d'erreur
+    //   res.status(404).send(`Project name ${name} not found`);
+    //   //sinon
+    // } else {
+    //       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
+    //       res.json(results[0]);
+    // }
+    res.send(results);
+  } catch (err) {
     res.status(500).send(err.message);
   }
 };
 
 // création d'un nouveau projet
-const createOne = async (req, res) => {
-  const { project_name, project_description, project_link, project_date } =
+const createOne = async (req, res, next) => {
+  const { project_name, project_description, projet_link, project_date } =
     req.body;
 
-  if (
-    !project_name &&
-    !project_description &&
-    !project_link &&
-    !datecreated &&
-    !project_date
-  ) {
-    res.status(400).send("You must provide all mandatories datas");
+  if (!project_name || !project_description || !projet_link || !project_date) {
+    res.status(400).send(`You must provide all mandatories datas`);
   } else {
     try {
-      const [results] = await Projects.createOne({
+      // j'indique les données que je dois fournir pour créer un nouveau projet
+      const [result] = await Projects.createOne({
         project_name,
         project_description,
-        project_link,
-        datecreated,
+        projet_link,
         project_date,
       });
-      req.id = results.insertId;
+      //j'ajoute la propriété id pour passer la main au controller qui va récupérer l'album par son  id
+      req.id = result.insertId;
+      //next pour passer au controller suivant qui est celui de getOneById
+      next();
     } catch (err) {
       res.status(500).send(err.message);
     }
@@ -82,37 +86,44 @@ const createOne = async (req, res) => {
 
 const updateOne = async (req, res) => {
   const { id } = req.params;
-  const { project_name, project_description, project_link, project_date } =
+  //j'indique les données que je veux récupérer dans le body
+  const { project_name, project_description, projet_link, project_date } =
     req.body;
-
-  if (!project_name && !project_description && !project_link && !project_date) {
-    res.status(400).send("You must provide all mandatories datas");
+  // console.log(id);
+  // console.log(project_name, project_description, projet_link, project_date);
+  if (!project_name && !project_description && !projet_link && !project_date) {
+    res.status(400).send(`Datas invalid`);
+    // si j'ai une valeur, alors
   } else {
+    // je créé un objet temporaire pour stocker les données de mise à jour
     const projectToUpdate = {};
+    // console.log(projectToUpdate);
     if (project_name) {
       projectToUpdate.project_name = project_name;
     }
     if (project_description) {
       projectToUpdate.project_description = project_description;
     }
-    if (project_link) {
-      projectToUpdate.project_link = project_link;
+    if (projet_link) {
+      projectToUpdate.projet_link = projet_link;
     }
     if (project_date) {
       projectToUpdate.project_date = project_date;
     }
-  }
 
   try {
-    const [result] = await Projects.updateOne({ projectToUpdate, id });
+    const [result] = await Projects.updateOne(projectToUpdate, id);
+    console.log(result);
+    // si la propriété affected row =0 signifie pas de mise à jour
     if (result.affectedRows === 0) {
-      res.status(404).send("Project with id ${id} not found");
+      res.status(404).send(`Project with id ${id} not found`);
     } else {
-      res.status(204);
+      res.status(200).send(`Update OK`);
     }
   } catch (err) {
     res.status(500).send(err.message);
   }
+}
 };
 
 const deleteOne = async (req, res) => {
@@ -120,9 +131,9 @@ const deleteOne = async (req, res) => {
   try {
     const [result] = await Projects.deleteOneById(id);
     if (result.affectedRows === 0) {
-      res.status(404).send("Project with id ${id} not found");
+      res.status(404).send(`Project with id ${id} not found`);
     } else {
-      res.status(204);
+      res.status(200).send(`Project deleted`);
     }
   } catch (err) {
     res.status(500).send(err.message);
