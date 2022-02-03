@@ -37,26 +37,26 @@ const getOneById = async (req, res) => {
   }
 };
 
-//recherche du prjet par le nom
-const getOneByName = async (req, res) => {
-  // je récupère le nom du projet via une requête (.query)
-  const { name } = req.query;
-  try {
-    const [results] = await Projects.findOneByName(name);
-    // je teste que mon tableau est rempli et récupère un résultat
-    // if (results.length ===0) {
-    //         // si tableau = 0 càd vide, je renvois un message d'erreur
-    //   res.status(404).send(`Project name ${name} not found`);
-    //   //sinon
-    // } else {
-    //       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
-    //       res.json(results[0]);
-    // }
-    res.send(results);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
+// //recherche du prjet par le nom
+// const getOneByName = async (req, res) => {
+//   // je récupère le nom du projet via une requête (.query)
+//   const { name } = req.query;
+//   try {
+//     const [results] = await Projects.findOneByName(name);
+//     // je teste que mon tableau est rempli et récupère un résultat
+//     // if (results.length ===0) {
+//     //         // si tableau = 0 càd vide, je renvois un message d'erreur
+//     //   res.status(404).send(`Project name ${name} not found`);
+//     //   //sinon
+//     // } else {
+//     //       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
+//     //       res.json(results[0]);
+//     // }
+//     res.send(results);
+//   } catch (err) {
+//     res.status(500).send(err.message);
+//   }
+// };
 
 // création d'un nouveau projet
 const createOne = async (req, res, next) => {

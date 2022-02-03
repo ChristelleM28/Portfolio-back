@@ -1,6 +1,8 @@
-require ("dotenv").config();
-
+require("dotenv").config();
 const express = require("express");
+
+// j'ajoute Cors pour valider la connexion front/back
+const cors = require("cors");
 
 //Je créé la variable mainRouter qui sera importée dans Routes
 const mainRouter = require("./routes");
@@ -23,6 +25,13 @@ const app = express();
 
 //permet d'utiliser express dans tous les middleswares de l'application
 app.use(express.json());
+
+app.use(
+  cors({
+    //je précise quels sont les clients qui peuvent interroger l'api
+    origin: [process.env.CLIENT_ORIGIN],
+  }),
+);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello Christelle" });

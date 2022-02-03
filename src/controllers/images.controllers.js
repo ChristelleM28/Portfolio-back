@@ -26,7 +26,7 @@ const getOneById = async (req, res) => {
     // je teste que mon tableau est rempli et récupère un résultat
     if (results.length === 0) {
       // si tableau = 0 càd vide, je renvois un message d'erreur
-      res.status(404).send(`Project id ${id} not found`);
+      res.status(404).send(`Image id ${id} not found`);
       // sinon
     } else {
       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0

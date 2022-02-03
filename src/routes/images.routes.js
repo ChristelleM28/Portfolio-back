@@ -5,7 +5,6 @@ const { imagesControllers } = require("../controllers");
 //GET
 imagesRouter.get("/", imagesControllers.getAll);
 imagesRouter.get("/:id", imagesControllers.getOneById);
-// projectsRouter.get("/", projectsControllers.getOneByName);
 
 //POST
 imagesRouter.post("/", imagesControllers.createOne,
