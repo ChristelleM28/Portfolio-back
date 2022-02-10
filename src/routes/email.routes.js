@@ -37,13 +37,13 @@ emailRouter.post("/html", async (req, res) => {
   };
 
   // J'utilise le transport pour envoyer le mail avec les options
-await transport.sendMail(mailOptions, (err, info) => {
-  if (err) {
-    res.status(500).send(err);
-      } else {
-        res.send("Email sent with success!");
-      }
-})
+  transport.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send("Email sent with success!");
+    }
+  })
 
 });
 
