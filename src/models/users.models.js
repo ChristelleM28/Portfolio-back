@@ -32,7 +32,7 @@ class Users {
 
   //pour le GET
   static findAll() {
-    const sql = "SELECT * FROM users";
+    const sql = "SELECT id, email FROM users";
     return connection.promise().query(sql);
   }
 

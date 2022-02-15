@@ -83,7 +83,7 @@ const getOneByEmail = async (req, res, next) => {
 const createOne = async (req, res, next) => {
   const { email, password } = req.body;
   // je vais hasher mon mot de pass
-  const hashedPassword = Users.hashPassword(password);
+  const hashedPassword = await Users.hashPassword(password);
 
   if (!email || !password) {
     res.status(400).send(`You must provide all mandatories datas`);
@@ -92,7 +92,7 @@ const createOne = async (req, res, next) => {
       // j'indique les données que je dois fournir pour créer un nouveau projet
       const [result] = await Users.createOne({
         email,
-        hashed_password: hashedPassword,
+        password: hashedPassword,
       });
       //j'ajoute la propriété id pour passer la main au controller qui va récupérer l'album par son  id
       req.id = result.insertId;
@@ -153,19 +153,20 @@ const deleteOne = async (req, res) => {
   }
 };
 
-const verifyCredentials = async (req, res) => {
+const verifyCredentials = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const [results] = await Users.findOneByEmail(email);
-    if (results.affectedRows === 0) {
-      res.status(404).send("bad credential");
+    if (results.length === 0) {
+      res.status(404).send("bad credential haha");
     } else {
-      const validatePassword = await Users.validatePassword(
+      const validatePassword = await Users.verifyPassword(
         password,
-        hashedPassword
+        results[0].password
       );
+      console.log(validatePassword);
       if (!validatePassword) {
-        res.status(401).send("bad credentials");
+        res.status(401).send("bad credential");
       } else {
         req.user = results[0];
         next();
