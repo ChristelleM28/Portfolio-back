@@ -7,7 +7,7 @@ authRouter.get(
   usersControllers.getOneByEmail,
 );
 authRouter.post(
-  "/auth",
+  "/admin",
   usersControllers.verifyCredentials,
   authControllers.createToken
 );

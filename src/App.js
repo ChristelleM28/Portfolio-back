@@ -30,6 +30,7 @@ app.use(
   cors({
     //je précise quels sont les clients qui peuvent interroger l'api
     origin: [process.env.CLIENT_ORIGIN],
+    credentials: true,
   }),
 );
 
