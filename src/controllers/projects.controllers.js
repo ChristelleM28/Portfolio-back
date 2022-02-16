@@ -133,7 +133,7 @@ const deleteOne = async (req, res) => {
     if (result.affectedRows === 0) {
       res.status(404).send(`Project with id ${id} not found`);
     } else {
-      res.status(200).send(`Project deleted`);
+      res.status(204).send(`Project deleted`);
     }
   } catch (err) {
     res.status(500).send(err.message);

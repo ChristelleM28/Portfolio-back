@@ -146,7 +146,7 @@ const deleteOne = async (req, res) => {
     if (result.affectedRows === 0) {
       res.status(404).send(`User with id ${id} not found`);
     } else {
-      res.status(200).send(`User deleted`);
+      res.status(204).send(`User deleted`);
     }
   } catch (err) {
     res.status(500).send(err.message);
