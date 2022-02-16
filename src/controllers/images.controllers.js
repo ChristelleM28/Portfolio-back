@@ -111,7 +111,7 @@ const deleteOne = async (req, res) => {
     if (result.affectedRows === 0) {
       res.status(404).send(`Image with id ${id} not found`);
     } else {
-      res.status(200).send(`Image deleted`);
+      res.status(204).send(`Image deleted`);
     }
   } catch (err) {
     res.status(500).send(err.message);
