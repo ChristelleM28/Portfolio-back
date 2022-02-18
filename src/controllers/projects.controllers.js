@@ -136,7 +136,7 @@ const deleteOne = async (req, res) => {
       res.status(204).send(`Project deleted`);
     }
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).send("erreur ligne 139");
   }
 };
 
