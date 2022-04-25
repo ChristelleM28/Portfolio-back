@@ -85,7 +85,6 @@ const postImageObject = (req, res, next) => {
     if (err) {
       res.status(500).json({ errorMessage: err.message });
     } else {
-      req.imageName = req.file.filename;
       req.body = JSON.parse(req.body.data);
       next();
       //autre option
