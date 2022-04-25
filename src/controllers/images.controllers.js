@@ -1,10 +1,12 @@
 const { Images } = require("../models");
+const multer = require("multer");
 
 // recherche de toutes les images
 const getAll = async (req, res) => {
   try {
     const [results] = await Images.findAll();
     res.json(results);
+    console.log(results);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -39,40 +41,67 @@ const getOneById = async (req, res) => {
 
 // création d'une nouvelle image
 const createOne = async (req, res, next) => {
-  const { img_name, img_description, img_url, projects_id} =
-    req.body;
-
-  if (!img_name || !img_description || !img_url ||!projects_id ) {
+  const { img_name, img_description, projects_id } = req.body;
+  if (!img_name || !img_description || !projects_id) {
     res.status(400).send(`You must provide all mandatories datas`);
   } else {
     try {
-      // j'indique les données que je dois fournir pour créer une nouvelle image 
+      // j'indique les données que je dois fournir pour créer une nouvelle image
       const [result] = await Images.createOne({
         img_name,
         img_description,
-        img_url,
-        projects_id
-    });
-  
-      //j'ajoute la propriété id pour passer la main au controller qui va récupérer l'album par son  id
+        img_filename: req.file.filename,
+        projects_id,
+      });
+
+      //j'ajoute la propriété id pour passer la main au controller qui va récupérer l'image par son  id
       req.id = result.insertId;
-      //next pour passer au controller suivant qui est celui de getOneById
+      //next pour passer au controller suivant
       next();
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).send("ligne 64");
     }
   }
-}
-;
+};
+//pour poster un fichier
+const postImageObject = (req, res, next) => {
+  const storage = multer.diskStorage({
+    //utiliser le memotystorage pour éviter de stocker des images erronées
+    destination: (req, file, cb) => {
+      //Chemin de destination des images des
+      cb(null, "./public/images");
+    },
+    filename: (req, file, cb) => {
+      //ajout d'un timestamp pour différencier les images
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
+
+  //configuration de multer pour sauvegarder un seul fichier qui est dans req.body.file
+  //pour uploader plusieurs images, utiliser le .array au lieu du .single
+  const upload = multer({ storage }).single("file");
+
+  upload(req, res, (err) => {
+    if (err) {
+      res.status(500).json({ errorMessage: err.message });
+    } else {
+      req.imageName = req.file.filename;
+      req.body = JSON.parse(req.body.data);
+      next();
+      //autre option
+      // on peut sauvegarder le nom et d'autres données de l'image dans une table
+      // res.status(201).json({filename: req.filename});
+    }
+  });
+};
 
 const updateOne = async (req, res) => {
   const { id } = req.params;
   //j'indique les données que je veux récupérer dans le body
-  const { img_name, img_description, img_url } =
-    req.body;
+  const { img_name, img_description, img_filename } = req.body;
   // console.log(id);
   // console.log(img_name, img_description, img_url);
-  if (!img_name && !img_description && !img_url) {
+  if (!img_name && !img_description && !img_filename) {
     res.status(400).send(`Datas invalid`);
     // si j'ai une valeur, alors
   } else {
@@ -85,23 +114,23 @@ const updateOne = async (req, res) => {
     if (img_description) {
       imageToUpdate.img_description = img_description;
     }
-    if (img_url) {
-      imageToUpdate.img_url = img_url;
+    if (img_filename) {
+      imageToUpdate.img_filename = img_filename;
     }
 
-  try {
-    const [result] = await Images.updateOne(imageToUpdate, id);
-    console.log(result);
-    // si la propriété affected row =0 signifie pas de mise à jour
-    if (result.affectedRows === 0) {
-      res.status(404).send(`Images with id ${id} not found`);
-    } else {
-      res.status(200).send(`Update OK`);
+    try {
+      const [result] = await Images.updateOne(imageToUpdate, id);
+      console.log(result);
+      // si la propriété affected row =0 signifie pas de mise à jour
+      if (result.affectedRows === 0) {
+        res.status(404).send(`Images with id ${id} not found`);
+      } else {
+        res.status(200).send(`Update OK`);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
     }
-  } catch (err) {
-    res.status(500).send(err.message);
   }
-}
 };
 
 const deleteOne = async (req, res) => {
@@ -122,6 +151,7 @@ module.exports = {
   getAll,
   getOneById,
   createOne,
+  postImageObject,
   updateOne,
   deleteOne,
 };

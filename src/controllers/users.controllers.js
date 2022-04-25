@@ -6,11 +6,11 @@ const validateDataCreateUser = (req, res, next) => {
   const { email, password } = req.body;
   //Je vérifie si mon email est déjà utilisé
   if (Users.emailAlreadyExists(email)) {
-    res.status(400).send("Email already used");
+    res.status(400).send("Email dejà existant");
     //Si je n'ai pas d'erreur, je vérie si le mot de passe est valide ou non
   } else {
     if (!Users.validatePassword(password)) {
-      res.status(400).send("Invalid password");
+      res.status(400).send("Mot de passe invalide");
     } else {
       next();
     }
@@ -43,7 +43,7 @@ const getOneById = async (req, res) => {
     // je teste que mon tableau est rempli et récupère un résultat
     if (results.length === 0) {
       // si tableau = 0 càd vide, je renvoie un message d'erreur
-      res.status(404).send(`User id ${id} not found`);
+      res.status(404).send(`Utilisateur ${id} introuvable`);
       // sinon
     } else {
       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
@@ -68,7 +68,7 @@ const getOneByEmail = async (req, res, next) => {
     // je teste que mon tableau est rempli et récupère un résultat
     if (results.length === 0) {
       // si tableau = 0 càd vide, je renvoie un message d'erreur
-      res.status(404).send(`User email ${email} not found`);
+      res.status(404).send(`Email ${email} introuvable`);
       // sinon
     } else {
       //si je trouve l'id, je renvoi le résultat unique du tableau à l'index 0
@@ -86,7 +86,7 @@ const createOne = async (req, res, next) => {
   const hashedPassword = await Users.hashPassword(password);
 
   if (!email || !password) {
-    res.status(400).send(`You must provide all mandatories datas`);
+    res.status(400).send(`Vous devez compléter tous les champs`);
   } else {
     try {
       // j'indique les données que je dois fournir pour créer un nouveau projet
@@ -111,7 +111,7 @@ const updateOne = async (req, res) => {
   // console.log(id);
   // console.log(email, password);
   if (!email && !password) {
-    res.status(400).send(`Datas invalid`);
+    res.status(400).send(`Données invalides`);
     // si j'ai une valeur, alors
   } else {
     // je créé un objet temporaire pour stocker les données de mise à jour
@@ -129,7 +129,7 @@ const updateOne = async (req, res) => {
       console.log(result);
       // si la propriété affected row =0 signifie pas de mise à jour
       if (result.affectedRows === 0) {
-        res.status(404).send(`User with id ${id} not found`);
+        res.status(404).send(`Utilisateur ${id} introuvable`);
       } else {
         res.status(200).send(`User updated`);
       }
@@ -144,9 +144,9 @@ const deleteOne = async (req, res) => {
   try {
     const [result] = await Users.deleteOneById(id);
     if (result.affectedRows === 0) {
-      res.status(404).send(`User with id ${id} not found`);
+      res.status(404).send(`Utilisateur ${id} introuvable`);
     } else {
-      res.status(204).send(`User deleted`);
+      res.status(204).send(`Utilisateur supprimé`);
     }
   } catch (err) {
     res.status(500).send(err.message);

@@ -41,7 +41,7 @@ emailRouter.post("/html", async (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.send("Email sent with success!");
+      res.send("Votre email a bien été envoyé");
     }
   })
 
