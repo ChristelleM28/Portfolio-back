@@ -34,6 +34,9 @@ app.use(
   }),
 );
 
+//chemin pour uploadfile
+app.use("/images", express.static("./public"));
+
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello Christelle" });
 });

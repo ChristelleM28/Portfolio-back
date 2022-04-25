@@ -11,7 +11,7 @@ usersRouter.post("/", usersControllers.createOne,
 //puisqu'il y a un next dans le controller, je dois préciser ici la route de celui qui prendra le relais et donc modifier la façon dont le controller récupère l'id
 usersControllers.getOneById);
 
-// partie de Xavier pour la ceration du user
+// partie de Xavier pour la création du user
 // userRouter.post("/", (req, res) => {
 //   const { email, password} = req.body;res.status(201).json({ email, password});
 // };
