@@ -6,7 +6,6 @@ const getAll = async (req, res) => {
   try {
     const [results] = await Images.findAll();
     res.json(results);
-    console.log(results);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -81,6 +80,7 @@ const postImageObject = (req, res, next) => {
   //pour uploader plusieurs images, utiliser le .array au lieu du .single
   const upload = multer({ storage }).single("file");
 
+  //appel a multer
   upload(req, res, (err) => {
     if (err) {
       res.status(500).json({ errorMessage: err.message });
