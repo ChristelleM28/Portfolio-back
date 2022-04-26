@@ -1,10 +1,19 @@
-const { Projects } = require("../models");
+const { Projects, Images } = require("../models");
 
 // recherche de tous les projets
 const getAll = async (req, res) => {
   try {
     const [results] = await Projects.findAll();
-    res.json(results);
+
+    //création d'une variable pour récupérer toutes les images d'un projet
+    const images = await Promise.all(
+      results?.map(async (file) => {
+        const [result] = await Images.findImageByProjectId(file.id);
+      //je destructure le tableau file et j'ajoute l'objet images qui correspond au result
+        return { ...file, images: result };
+      })
+    );
+    res.json(images);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -111,19 +120,19 @@ const updateOne = async (req, res) => {
       projectToUpdate.project_date = project_date;
     }
 
-  try {
-    const [result] = await Projects.updateOne(projectToUpdate, id);
-    console.log(result);
-    // si la propriété affected row =0 signifie pas de mise à jour
-    if (result.affectedRows === 0) {
-      res.status(404).send(`Project with id ${id} not found`);
-    } else {
-      res.status(200).send(`Update OK`);
+    try {
+      const [result] = await Projects.updateOne(projectToUpdate, id);
+      console.log(result);
+      // si la propriété affected row =0 signifie pas de mise à jour
+      if (result.affectedRows === 0) {
+        res.status(404).send(`Project with id ${id} not found`);
+      } else {
+        res.status(200).send(`Update OK`);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
     }
-  } catch (err) {
-    res.status(500).send(err.message);
   }
-}
 };
 
 const deleteOne = async (req, res) => {
