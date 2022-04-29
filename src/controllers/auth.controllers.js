@@ -29,7 +29,10 @@ const createToken = (req, res) => {
       secure: ACCESS_JWT_COOKIE_SECURE === "true",
       sameSite: "lax",
     })
-    .cookie("refresh-token", refreshToken, { httpOnly: true, ACCESS_JWT_COOKIE_MAXAGE })
+    .cookie("refresh-token", refreshToken, {
+      httpOnly: true,
+      ACCESS_JWT_COOKIE_MAXAGE,
+    })
     .json({ id });
 };
 
@@ -44,10 +47,10 @@ const verifyToken = async (req, res, next) => {
       req.userId = decoded.id;
       return next();
     });
-  }else {
+  } else {
     res.clearCookie("token");
-  res.status(403).send("Unauthorized");
-}
+    res.status(403).send("Unauthorized");
+  }
 };
 
 const refreshToken = (req, res) => {
@@ -79,7 +82,10 @@ const refreshToken = (req, res) => {
   });
   return res
     .status(200)
-    .cookie("token", newToken, { httpOnly: true, maxAge:ACCESS_JWT_COOKIE_MAXAGE });
+    .cookie("token", newToken, {
+      httpOnly: true,
+      maxAge: ACCESS_JWT_COOKIE_MAXAGE,
+    });
 };
 
 module.exports = {

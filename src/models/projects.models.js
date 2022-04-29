@@ -1,5 +1,7 @@
 const { connection } = require("../../db-connection");
 
+
+/* A class that is used to create a new project. */
 class Projects {
   //pour le GET
   static findAll() {
@@ -11,11 +13,6 @@ class Projects {
   const sql = "SELECT * FROM projects WHERE id=?";
   return connection.promise().query(sql, [id]);
   }
-
-  // static findOneByName(name) {
-  //   const sql = "SELECT * FROM projects WHERE project_name=?";
-  //   return connection.promise().query(sql, [name]);
-  // }
 
   //pour le post: création nouveau projet
 static createOne(project) {
