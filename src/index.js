@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 
 //écoute le server
 app.listen(port, (err) => {
-  // si j'ai une erreur
+
   if (err) {
     //console.log(err)
     console.error(`ERROR: ${err.message}`);

@@ -69,21 +69,21 @@ const getOneById = async (req, res) => {
 
 // création d'un nouveau projet
 const createOne = async (req, res, next) => {
-  const { project_name, project_description, projet_link, project_date } =
+  const { project_name, project_description, project_date } =
     req.body;
 
-  if (!project_name || !project_description || !projet_link || !project_date) {
+  if (!project_name || !project_description || !project_date) {
     res.status(400).send(`You must provide all mandatories datas`);
   } else {
     try {
-      // j'indique les données que je dois fournir pour créer un nouveau projet
+      // j'indique les données que je dois récupérer pour créer un nouveau projet
       const [result] = await Projects.createOne({
         project_name,
         project_description,
-        projet_link,
+        // projet_link,
         project_date,
       });
-      //j'ajoute la propriété id pour passer la main au controller qui va récupérer l'album par son  id
+      //C'est une manière de passer l' id du nouveau projet créé au controller suivant
       req.id = result.insertId;
       //next pour passer au controller suivant qui est celui de getOneById
       next();

@@ -1,4 +1,6 @@
+/* Creating a router object that will be used to handle the routes. */
 const projectsRouter = require("express").Router();
+/* Destructuring the projectsControllers object from the controllers module. */
 const { projectsControllers } = require("../controllers");
 
 

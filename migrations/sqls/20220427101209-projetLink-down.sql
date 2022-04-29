@@ -1,0 +1,1 @@
+ALTER TABLE projects MODIFY projet_link varchar(255) NOT NULL;
