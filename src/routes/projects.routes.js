@@ -3,7 +3,6 @@ const projectsRouter = require("express").Router();
 /* Destructuring the projectsControllers object from the controllers module. */
 const { projectsControllers } = require("../controllers");
 
-
 //GET
 projectsRouter.get("/", projectsControllers.getAll);
 projectsRouter.get("/:id", projectsControllers.getOneById);

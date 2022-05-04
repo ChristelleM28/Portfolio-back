@@ -1,6 +1,5 @@
 const { connection } = require("../../db-connection");
 
-
 /* A class that is used to create a new project. */
 class Projects {
   //pour le GET
