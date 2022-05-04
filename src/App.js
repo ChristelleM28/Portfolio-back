@@ -20,6 +20,7 @@ app.use(
 const mainRouter = require("./routes");
 
 //MainRouter est une variable qui sera créée dans Routes
+/* Telling the server to use the mainRouter for all requests that start with /api. */
 app.use("/api", mainRouter);
 
 
@@ -44,6 +45,7 @@ app.use("/api", mainRouter);
 //chemin pour uploadfile
 app.use("/images", express.static("public/images"));
 
+/* A route that will be used to test the server. */
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Hello Christelle" });
 });
